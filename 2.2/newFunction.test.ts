@@ -51,3 +51,4 @@ function blockbuster(movie: string): string {
     return `We do not have that ${movie}`
   }
 }
+//? why did we create a function instead of doing it in the expects?

@@ -7,9 +7,9 @@ import {
     WebElement,
     Key,
 } from "selenium-webdriver";
-
+//? I am Somewhat confused on where the "imports" are located. 
 const chromedriver = require("chromedriver");
-
+//? I am not sure what a Chromedriver is
 const driver: WebDriver = new Builder()
     .withCapabilities(Capabilities.chrome())
     .build();
@@ -31,9 +31,11 @@ describe("Employee Manager 1.2", () => {
         "https://devmountain-qa.github.io/employee-manager/1.2_Version/index.html"
         );
     });
+    //? What is "Async" ? What does the beforeEach actually do?
     afterAll(async () => {
         await driver.quit();
     });
+    //? what is "afterAll" function?
     describe("handles unsaved, canceled, and saved changes correctly", () => {
         test("An unsaved change doesn't persist", async () => {
         /*
@@ -44,29 +46,29 @@ describe("Employee Manager 1.2", () => {
         4. Open Bernice Ortiz
         5. Verify the name field is the original name
         */
-        await driver.findElement().click();
+        await driver.findElement(bernice).click();
         await driver.wait(
-            until.elementIsVisible(await driver.findElement())
+            until.elementIsVisible(await driver.findElement(nameInput))
         );
-        await driver.findElement().clear();
-        await driver.findElement().sendKeys("Test Name");
-        await driver.findElement().click();
+        await driver.findElement(nameInput).clear();
+        await driver.findElement(nameInput).sendKeys("Test Name");
+        await driver.findElement(phillip).click();
         await driver.wait(
             until.elementTextContains(
-            await driver.findElement(),
+            await driver.findElement(nameDisplay),
             "Phillip"
             )
         );
-        await driver.findElement().click();
+        await driver.findElement(bernice).click();
         await driver.wait(
             until.elementTextContains(
-            await driver.findElement(),
+            await driver.findElement(nameDisplay),
             "Bernice"
             )
         );
         expect(
-            await (await driver.findElement()).getAttribute("")
-        ).toBe("");
+            await (await driver.findElement(nameDisplay)).getAttribute("Value")
+        ).toBe("Bernice Ortiz");
         });
 
         test("A canceled change doesn't persist", async () => {
@@ -77,17 +79,18 @@ describe("Employee Manager 1.2", () => {
             3. Click cancel
             5. Verify the name field is the original name
             */
-            await driver.findElement().click();
+            await driver.findElement(phillip).click();
             await driver.wait(
-                until.elementIsVisible(await driver.findElement())
+                until.elementIsVisible(await driver.findElement(nameInput))
             );
-            await driver.findElement().clear();
-            await driver.findElement().sendKeys("Test Name");
-            await driver.findElement().click();
+            await driver.findElement(nameInput).clear();
+            await driver.findElement(nameInput).sendKeys("Test Name");
+            await driver.findElement(cancelButton).click();
             expect(
-                await (await driver.findElement()).getAttribute("")
-            ).toBe("");
+                await (await driver.findElement(nameInput)).getAttribute("Value")
+            ).toBe("Phillip Weaver");
         });
+        //? why cant we create a veryfiy button instead?
 
         test("A saved change persists", async () => {
             /*
@@ -99,23 +102,23 @@ describe("Employee Manager 1.2", () => {
             5. Open Bernice Ortiz's old record
             5. Verify the name field is the edited name
             */
-            await driver.findElement().click();
+            await driver.findElement(bernice).click();
             await driver.wait(
-                until.elementIsVisible(await driver.findElement())
+                until.elementIsVisible(await driver.findElement(nameInput))
             );
-            await driver.findElement().clear();
-            await driver.findElement().sendKeys("Test Name");
-            await driver.findElement().click();
-            await driver.findElement().click();
+            await driver.findElement(saveButton).clear();
+            await driver.findElement(nameInput).sendKeys("Test Name");
+            await driver.findElement(phillip).click();
+            await driver.findElement(bernice).click();
             await driver.wait(
                 until.elementTextContains(
-                await driver.findElement(),
+                await driver.findElement(nameInput),
                 "Phillip"
                 )
             );
-            await driver.findElement().click();
+            await driver.findElement(bernice).click();
             expect(
-                await (await driver.findElement()).getAttribute("value")
+                await (await driver.findElement(nameInput)).getAttribute("value")
             ).toBe("Bernice Ortiz");
     });
 });
@@ -129,18 +132,19 @@ describe("Employee Manager 1.2", () => {
             3. Save the change
             4. Verify the error is present
             */
-            await driver.findElement().click();
+            await driver.findElement(bernice).click();
             await driver.wait(
-                until.elementIsVisible(await driver.findElement())
+                until.elementIsVisible(await driver.findElement(nameInput))
             );
-            await driver.findElement().clear();
-            await driver.findElement().sendKeys(Key.SPACE, Key.BACK_SPACE);
-            await driver.findElement().click();
-            await driver.wait(until.elementLocated());
-            expect(await (await driver.findElement()).getText()).toBe(
+            await driver.findElement(nameInput).clear();
+            await driver.findElement(nameInput).sendKeys(Key.SPACE, Key.BACK_SPACE);
+            await driver.findElement(saveButton).click();
+            await driver.wait(until.elementLocated(errorCard));
+            expect(await (await driver.findElement(errorCard)).getText()).toBe(
                 "The name field must be between 1 and 30 characters long."
             );
         });
+        //? Why do we "await driver"? what is the purpose of it?
         test("lets you cancel out of an error message", async () => {
             /*
             This test follows these steps:
@@ -151,21 +155,22 @@ describe("Employee Manager 1.2", () => {
             5. Cancel the change
             6. Verify the error is gone
             */
-            await driver.findElement().click();
+            await driver.findElement(bernice).click();
             await driver.wait(
-                until.elementIsVisible(await driver.findElement())
+                until.elementIsVisible(await driver.findElement(nameInput))
             );
-            await driver.findElement().clear();
-            await driver.findElement().sendKeys(Key.SPACE, Key.BACK_SPACE);
-            await driver.findElement().click();
-            await driver.wait(until.elementLocated());
-            expect(await (await driver.findElement()).getText()).toBe(
+            await driver.findElement(nameInput).clear();
+            await driver.findElement(nameInput).sendKeys(Key.SPACE, Key.BACK_SPACE);
+            await driver.findElement(saveButton).click();
+            await driver.wait(until.elementLocated(errorCard));
+            expect(await (await driver.findElement(errorCard)).getText()).toBe(
                 "The name field must be between 1 and 30 characters long."
             );
-            await driver.findElement().sendKeys(Key.SPACE);
-            await driver.findElement().click();
+            await driver.findElement(nameInput).sendKeys(Key.SPACE);
+            await driver.findElement(cancelButton).click();
             driver.wait(() => true, 500);
-            expect(await driver.findElements()).toHaveLength(0);
+            expect(await driver.findElements(errorCard)).toHaveLength(0);
         });
     });
 });
+//? what would happen if we put "100" into .toHaveLength()?

@@ -18,10 +18,9 @@ describe("myFunction", () => {
 
 
 import { blockBuster } from "./newFunction";
-
 describe('Testing Block Buster', () => {
   it('should return the movie set for MovieOne', () => {
-    expect(blockBuster()).toBe(""); 
+    expect(blockBuster()).toBe("");
   }); 
   it("should return the movie set for movie two", () => {
     expect(blockBuster()).toBe(""); 
@@ -33,6 +32,22 @@ describe('Testing Block Buster', () => {
     expect(blockBuster()).toBe(""); 
   });
   it("should return the movie set for movie five", () => {
-    expect(blockBuster()).toBe(""); 
+    expect(blockBuster()).toBe("Movie Five"); 
   }); 
 }); 
+//? i am confused on what you would expect the blockbuster to be?
+function blockbuster(movie: string): string {
+  if (movie == "MovieOne") {
+    return "MovieOne";
+  }if else (movie == "Movie Two") {
+    return "Movie Two";
+  }if else (movie == "Movie Three") {
+    return "Movie Three";
+  }if else (movie == "Movie Four") {
+    return "Movie Four"
+  }if else (movie == "Movie Five") {
+    return "Movie Five";
+  }else {
+    return `We do not have that ${movie}`
+  }
+}

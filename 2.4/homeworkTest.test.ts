@@ -57,7 +57,7 @@ describe("Employee Manager 1.2", () => {
             until.elementTextContains(
             await driver.findElement(nameDisplay),
             "Phillip"
-            )
+            ) //why is it just Phillip and not Phillip Weaver?
         );
         await driver.findElement(bernice).click();
         await driver.wait(

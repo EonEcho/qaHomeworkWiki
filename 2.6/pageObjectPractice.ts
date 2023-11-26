@@ -1,6 +1,6 @@
-import {By, until, WebDriver, WebElement} from 'selenium-webdriver';
+import {By, until, WebDriver, WebElement, Capabilities, Builder} from 'selenium-webdriver';
 const chromedriver = require ('chromedriver');
-
+const driver: WebDriver = new Builder().withCapabilities(Capabilities.chrome()).build();
 export class googlePage {
     //required paramaters in order to use the class outside of the page.
     driver: WebDriver;
